@@ -27,7 +27,7 @@ export default function Dashboard() {
         const savetemplate = async() => {
 
 
-            const send = await axios.post("https://mediaappbackend-thw6.onrender.com/savetemplate" , {selectedchanels , message , uploadedfiles , allpath , date})
+            const send = await axios.post("http://localhost:4000/savetemplate" , {selectedchanels , message , uploadedfiles , allpath , date})
             setsave(true)
             setTimeout(() => {
                 setsave(false)
@@ -46,7 +46,7 @@ export default function Dashboard() {
             }else{
              setnotselected(false)
              setcreate(true)
-                const getinfo = await axios.post('https://mediaappbackend-thw6.onrender.com/sendmessages' , {selectedchanels , message , uploadedfiles , allpath , date})
+                const getinfo = await axios.post('http://localhost:4000/sendmessages' , {selectedchanels , message , uploadedfiles , allpath , date})
              
             }
             console.log(selectedchanels)
@@ -58,7 +58,7 @@ export default function Dashboard() {
 
 
         const mainfunc = async() => {
-        const getinfo = await axios.get('https://mediaappbackend-thw6.onrender.com/getchanel')
+        const getinfo = await axios.get('http://localhost:4000/getchanel')
 
         console.log(getinfo.data)
         setchannels(getinfo.data)

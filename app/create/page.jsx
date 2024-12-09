@@ -15,7 +15,7 @@ export default function page() {
 
     if(e.nativeEvent.submitter.name == 'addchannel'){
       
-      const send = axios.post("https://mediaappbackend-thw6.onrender.com/createchanel" , {chanelname:formref.current[0].value})
+      const send = axios.post("http://localhost:4000/createchanel" , {chanelname:formref.current[0].value})
 
        if(send){
         setcreated(true)

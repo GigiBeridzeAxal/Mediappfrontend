@@ -11,7 +11,7 @@ export default function Login() {
         e.preventDefault();
 
 
-         const send = await axios.post('https://mediaappbackend-thw6.onrender.com/', {phone:phonenumber , countiniue:true}) 
+         const send = await axios.post('http://localhost:4000/', {phone:phonenumber , countiniue:true}) 
          const data = send.data.sessionId
          console.log(send.data)
 
@@ -28,7 +28,7 @@ export default function Login() {
 
        
         setcodeopened(true)
-         const send = await axios.post('https://mediaappbackend-thw6.onrender.com/', {phone:phonenumber}) 
+         const send = await axios.post('http://localhost:4000/', {phone:phonenumber}) 
          const data = send.data.sessionId
          console.log(send.data)
          if(send.status == 201){
@@ -42,7 +42,7 @@ export default function Login() {
         e.preventDefault();
 
        
-        const send = await axios.post('https://mediaappbackend-thw6.onrender.com/code', {code:code}) 
+        const send = await axios.post('http://localhost:4000/code', {code:code}) 
         console.log(send.statusText)
         
 

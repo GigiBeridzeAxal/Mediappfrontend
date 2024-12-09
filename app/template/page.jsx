@@ -29,7 +29,7 @@ export default function page() {
         const get = async() => {
 
 
-            const send = await axios.get('https://mediaappbackend-thw6.onrender.com/gettemplates')
+            const send = await axios.get('http://localhost:4000/gettemplates')
             setTempalte(send.data)
             console.log(send.data)
             if(send){

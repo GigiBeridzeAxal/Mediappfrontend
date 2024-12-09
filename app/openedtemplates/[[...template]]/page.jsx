@@ -41,7 +41,7 @@ const id = searchparams.get('id')
   
         const func = async() => {
 
-            const send = await axios.post('https://mediaappbackend-thw6.onrender.com/getuserbyid', {id})
+            const send = await axios.post('http://localhost:4000/getuserbyid', {id})
             setdata(send.data)
             console.log(send.data[0])
             setuploadedfiles(send.data[0].uploadedfiles)
@@ -49,7 +49,7 @@ const id = searchparams.get('id')
             setdate(send.data[0].date)
             setmessage(send.data[0].message)
             const mainfunc = async() => {
-                const getinfo = await axios.get('https://mediaappbackend-thw6.onrender.com/getchanel')
+                const getinfo = await axios.get('http://localhost:4000/getchanel')
         
                 console.log(getinfo.data)
                 setchannels(getinfo.data)
@@ -73,7 +73,7 @@ const id = searchparams.get('id')
 
 
     const savetemplate = async() => {
-        const getinfo = await axios.post('https://mediaappbackend-thw6.onrender.com/update' , {selectedchanels , message , uploadedfiles , allpath , date , id})
+        const getinfo = await axios.post('http://localhost:4000/update' , {selectedchanels , message , uploadedfiles , allpath , date , id})
 
     }
 
@@ -81,7 +81,7 @@ const id = searchparams.get('id')
         const sendmessage = async() => {
 
             console.log(selectedchanels)
-            const getinfo = await axios.post('https://mediaappbackend-thw6.onrender.com/sendmessages' , {selectedchanels , message , uploadedfiles , allpath , date})
+            const getinfo = await axios.post('http://localhost:4000/sendmessages' , {selectedchanels , message , uploadedfiles , allpath , date})
         }
       
 

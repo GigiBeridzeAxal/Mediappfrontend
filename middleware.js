@@ -8,7 +8,7 @@ export async function middleware(req){
     if(req.url == "http://localhost:3000/dashboard"){
 
         try{
-            const send = await axios.get('https://mediaappbackend-thw6.onrender.com/checkclient')
+            const send = await axios.get('http://localhost:4000/checkclient')
 
 
         }catch{
@@ -23,7 +23,7 @@ export async function middleware(req){
 if(req.url == "http://localhost:3000/template"){
 
     try{
-        const send = await axios.get('https://mediaappbackend-thw6.onrender.com/checkclient')
+        const send = await axios.get('http://localhost:4000/checkclient')
 
 
     }catch{
@@ -38,7 +38,7 @@ if(req.url == "http://localhost:3000/template"){
 if(req.url == "http://localhost:3000/openedtemplates"){
 
     try{
-        const send = await axios.get('https://mediaappbackend-thw6.onrender.com/checkclient')
+        const send = await axios.get('http://localhost:4000/checkclient')
 
 
     }catch{
@@ -53,7 +53,7 @@ if(req.url == "http://localhost:3000/openedtemplates"){
 if(req.url == "http://localhost:3000/create"){
 
     try{
-        const send = await axios.get('https://mediaappbackend-thw6.onrender.com/checkclient')
+        const send = await axios.get('http://localhost:4000/checkclient')
 
 
     }catch{
@@ -68,7 +68,7 @@ if(req.url == "http://localhost:3000/create"){
 if(req.url == "http://localhost:3000/"){
 
     try{
-        const send = await axios.get('https://mediaappbackend-thw6.onrender.com/checkclient')
+        const send = await axios.get('http://localhost:4000/checkclient')
         if(send){
             return NextResponse.redirect(new URL('/dashboard' , req.url)) 
         }
