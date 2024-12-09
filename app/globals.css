@@ -2,20 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body{
+  background-color: rgb(233, 233, 233);
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.selbtn{
+  z-index: 5;
 }
+.telegramlink input{
+  outline: 0;
+  border: 0;
+}
+.back{
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid rgb(59 130 246 / var(--tw-bg-opacity, 1));
+  color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
+  width: 70px;
+}
+.newmsgfile{
+  display: none;
+}
+.Attach{
+  display: flex;
+  align-items: center;
+  
+}
+.blur{
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  z-index: 2;
+  background-color: rgba(241, 241, 241, 0.829);
+
+  margin: 0;
+  left: 0px;top: 0px;
+}
+.msesage{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 5;
+  background: none;
+}
+.messageframe{
+  background-color: white;
+  padding: 30px;
+  width: 500px;
+  height: 220px;
+  box-shadow: 2px 2px 15px 2px rgb(224, 224, 224);
+
+  display: flex;
+
+  justify-content: center;
+  flex-direction: column;
+  gap: 35px;
+
+}
+.messageokay{
+  width: 100px;
+  padding: 5px;
+  border-radius: 3px;
+}
+.maintemplate{
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 200px;
+  max-width: 300px;
 }
