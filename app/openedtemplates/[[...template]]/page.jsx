@@ -25,6 +25,13 @@ const id = searchparams.get('id')
         const [loading , setloading ] = useState(true)
         const [serverloading , setserverloading] = useState('Server Loading.')
 
+
+        const deletetemplate = async(e) => {
+            console.log(data[0]._id)
+            const deleted = await axios.post("http://localhost:4000/deletetemplate" , {id:data[0]._id} )
+            window.location = '/dashboard'
+        }
+
         setInterval(() => {
             if(serverloading == 'Server Loading.'){
                 setserverloading("Server Loading..")
@@ -207,7 +214,7 @@ const id = searchparams.get('id')
 
 </form>
 
-        <div className="maintittledash text-[26px] flex items-center gap-[34px]">New Message </div>
+        <div className="maintittledash text-[26px]  flex items-center gap-[34px]">New Message <button onClick={() => deletetemplate()} className="delete"><img width={35} className=' flex p-[5px] bg-red-500 rounded-[25px]' src="TrashCan.png" alt=""  /></button> </div>
 
         <div className="selectchanel mt-[25px] mb-[25px]">
             <div className="selectittlechanel">SELECT CHANEL</div>

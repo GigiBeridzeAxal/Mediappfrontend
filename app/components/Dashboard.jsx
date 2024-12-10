@@ -3,27 +3,46 @@ import axios from 'axios'
 import Link from 'next/link'
 import React, { useEffect, useInsertionEffect, useState } from 'react'
 
+import EditorJS from '@editorjs/editorjs';
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+
+import FroalaEditorComponent from 'react-froala-wysiwyg'; import 'froala-editor/css/froala_style.min.css'; import 'froala-editor/css/froala_editor.pkgd.min.css';
+import { Editor } from "novel";
+
 export default function Dashboard() {
-
-
+  const [model, setModel] = useState('<p>Hello, Froala!</p>');
     const [selectedchanels , setselectedchanels] = useState([])
     const [selector , setselector] = useState(false)
     const [uploadedfiles , setuploadedfiles] = useState([])
         const [renderedimages , setrenderedimages] = useState(0)
         const [rendering , setrendering] = useState(false)
         const [channels , setchannels] = useState([])
-        const [message , setmessage] = useState()
+        const [message , setmessage] = useState('')
         const [allpath , setpath ] = useState([])
         const [dateenablder , setdateenabled] = useState(true)
         const [date , setdate] = useState(undefined)
         const [notselected , setnotselected] = useState(false)
         const [create , setcreate] = useState(false)
         const [save , setsave] = useState(false)
+        const [emojiopened , setemojiopened] = useState(false)
 
 
 
+        const config = {
+          toolbarButtons: ['bold', 'italic', 'underline', '|', 'fontSize', 'color', 'align', 'undo', 'redo'],
+          fontSize: ['12', '14', '18', '24', '30', '36'], // Font sizes for the dropdown
+        };
+     
 
+        const handleEmojiSelect = (emojiData) => {
+            // Append the selected emoji to the current text
+            console.log(emojiData)
+            setmessage((prevText) => prevText + emojiData.native);
+          };
+        
 
+     
         const savetemplate = async() => {
 
 
@@ -204,15 +223,13 @@ export default function Dashboard() {
 </form>
             <div className="maintittledash text-[26px] flex items-center gap-[34px]">New Message </div>
 
-            <div className="selectchanel mt-[25px] mb-[25px]">
+            <div className="selectchanel mt[-25px] mb-[25px]">
                 <div className="selectittlechanel">SELECT CHANEL</div>
                 {notselected == true ? <div className='text-red-500 mt-[5px]' >Please Select Cannel</div> : null}
                 <div className='flex flex-col  gap-[15px]'>
                     <div className='relative w-[500px] flex flex-col gap-[10px]' >
                     <button onClick={() => selector == true ? setselector(false) : setselector(true) } className="selectchanels relative w-[500px] mt-[15px] text-start bg-white p-[10px] flex items-center justify-between rounded-[5px]">Select Chanels {selector == true ? <img width={20} src="Up.png" alt="" /> :<img width={20} src="Down.png" alt="" /> }
-                
-              
-                
+      
                 </button>
 
                 {selector == true ? <div className="selector absolute top-[70px] left-[0px] w-[100%] flex flex-col gap-[1px] p-[5px] rounded-[10px] bg-white">{channels.map(value => <button onClick={() => selectedchanels.includes(value) ? Removeitem(value) :  setselectedchanels([...selectedchanels , value]) }  className='bg-gray-200 index-[5] selbtn w-[100%] p-[10px] rounded-[10px] flex items-center justify-center flex items-center justify-between' key={value} >{value[0]} {selectedchanels.includes(value) ? <img width={25} src="Checkmark.png" alt="" /> : null}</button>)}</div> : null} 
@@ -224,11 +241,12 @@ export default function Dashboard() {
 
                    
                     <br />
-
+    
                 </div>
                 <div className="navigationbtns flex items-center gap-[10px]">
                 <Link href={'/create'} className='bg-blue-500 text-white p-[5px] w-[200px] text-center'>Create New Chanel</Link>
                 <Link href={'/template'} className="bg-indigo-500 text-white p-[5px] w-[150px] text-center">Templates</Link> 
+
                 
                 </div>
 
@@ -239,9 +257,21 @@ export default function Dashboard() {
 
             <div className="messagetittle">Message</div>
 
-            <textarea  className='w-[1000px] mt-[10px] p-[10px]  h-[300px] rounded-[15px]' placeholder='Enter Your Message To Sent' onChange={(e) => setmessage(e.target.value)}></textarea>
 
 
+      <div>
+
+      </div>
+      <div className="textareadiv relative">
+      <textarea  value={message} className='w-[1000px] mt-[10px] p-[10px]  h-[300px] rounded-[15px]' placeholder='Enter Your Message To Sent' onChange={(e) => setmessage(e.target.value)}></textarea>
+      <div className="smile absolute flex items-end "><button onClick={() => emojiopened == true ? setemojiopened(false) : setemojiopened(true)} ><img  width={30} src="Happy.png" alt="" /></button>
+      {emojiopened ? <Picker data={data}  onEmojiSelect={handleEmojiSelect} /> : null}
+     
+      </div>
+      </div>
+
+        
+  
 
         </div>
         <br />
@@ -268,8 +298,10 @@ export default function Dashboard() {
         <button className='p-[5px] bg-blue-500 text-white rounded-[3px] w-[200px]' onClick={(e) => sendmessage()} >Send Message</button>
         <button className='p-[5px] bg-indigo-500 text-white rounded-[3px] w-[200px]' onClick={(e) => savetemplate()} >Save Template</button>
         </div>
+        
 
 
     </div>
+    
   )
 }

@@ -74,3 +74,14 @@ body{
   max-height: 200px;
   max-width: 300px;
 }
+.textareadiv{
+  position: relative;
+}
+.smile{
+  bottom: 10px;
+  position: absolute;
+  left: 950px;
+}
+.delete{
+  z-index: 15;
+}

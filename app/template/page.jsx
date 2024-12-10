@@ -11,6 +11,11 @@ export default function page() {
     const [loading , setloading ] = useState(true)
     const [serverloading , setserverloading] = useState('Server Loading.')
 
+
+    const deletetemplate = (data) => {
+        console.log(data)
+    }
+
     setInterval(() => {
         if(serverloading == 'Server Loading.'){
             setserverloading("Server Loading..")
@@ -75,7 +80,7 @@ export default function page() {
                         query:{id:data._id}
                     }} key={data._id}  className="maintemplate bg-gray-400 p-[10px] rounded-[10px] w-[300px] h-[200px] text-white flex flex-col justify-between ">
 
-                    <div className="templatemessage flex">{data.message}</div>
+                    <div className="templatemessage flex items-center justify-between">{data.message}  </div>
                     <div className="tempaltedate">{data.createdAt}</div>
 
 
