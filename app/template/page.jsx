@@ -70,17 +70,21 @@ export default function page() {
 
   </div> : null}
         <div>
-            <h1 className='text-[24px]' >Tempaltes</h1>
+            <h1 className='text-[24px]' >Templates</h1>
             <br />
 
             <div  className='flex flex-wrap gap-[10px] items-center' >
-                {templates.map(data => <div>
+                {templates.map(data => <div key={data._id} >
                     <Link href={{
                         pathname:'/openedtemplates',
                         query:{id:data._id}
-                    }} key={data._id}  className="maintemplate bg-gray-400 p-[10px] rounded-[10px] w-[300px] h-[200px] text-white flex flex-col justify-between ">
+                    }}   className="maintemplate bg-gray-400 p-[10px] rounded-[10px] w-[300px] h-[200px] text-white flex flex-col justify-between ">
 
-                    <div className="templatemessage flex items-center justify-between">{data.message}  </div>
+      
+                     <div className="center flex items-center justify-center w-[100%]">
+                     <img width={150} src={data.uploadedfiles[0]} alt="" />
+                     </div>
+
                     <div className="tempaltedate">{data.createdAt}</div>
 
 

@@ -4,7 +4,16 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { NextRequest } from 'next/server'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import datas from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
+
+import FroalaEditorComponent from 'react-froala-wysiwyg';
+import 'froala-editor/css/froala_editor.pkgd.min.css';  // Froala editor CSS
+import 'froala-editor/css/froala_style.min.css';        // Froala theme styles
+import 'froala-editor/css/froala_editor.pkgd.min.css';  
+import 'froala-editor/js/froala_editor.pkgd.min.js'; // Froala Editor JS
+import 'froala-editor/js/plugins.pkgd.min.js';
 
 export default  function page() {
 
@@ -12,9 +21,9 @@ const searchparams = useSearchParams()
 const id = searchparams.get('id')
 
     const [data , setdata] = useState([])
-    const [selectedchanels , setselectedchanels] = useState([])
+    const [selectedchanels , setselectedchanels] = useState([''])
     const [selector , setselector] = useState(false)
-    const [uploadedfiles , setuploadedfiles] = useState([])
+    const [uploadedfiles , setuploadedfiles] = useState([undefined])
         const [renderedimages , setrenderedimages] = useState(0)
         const [rendering , setrendering] = useState(false)
         const [channels , setchannels] = useState([])
@@ -24,14 +33,72 @@ const id = searchparams.get('id')
         const [date , setdate] = useState('')
         const [loading , setloading ] = useState(true)
         const [serverloading , setserverloading] = useState('Server Loading.')
+        const [emojiopened , setemojiopened] = useState(false)
+        const editorRef = useRef(null);
 
+
+           
+        const options = {
+          placeholderText: 'Edit Your Text Here!',
+          charCounterCount: false,
+          pluginsEnabled: ['emoji', 'bold', 'italic', 'underline'], // You can add other plugins too
+          toolbarButtons:   [['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript , fontSize', 'emoji'], ['fontFamily', 'fontSize', 'textColor', 'backgroundColor'], ['inlineClass', 'inlineStyle', 'clearFormatting']],
+          fontSize: ['12px', '16px', '20px', '24px', '30px', '40px'],  // Custom font size options
+          fontFamily: ['Arial', 'Courier', 'Times New Roman'],  // Custom font family options
+          emojiButtons: ['emoji'],
+        };
+        const handlepaste = (emoji) => {
+            const editor = editorRef.current.editor
+            const cursorPosition = editor.selection.get();
+    
+            // Insert the emoji at the cursor position
+            editor.html.insert(emoji.native);
+        
+            // Update the state with the new content
+            setmessage(editor.html.get());
+          }
+
+        const back = () => {
+            window.location = '/dashboard'
+        }
+
+        const [text, setText] = useState('');  // State for the input field content
+        const inputRef = useRef(null);         // Ref for the input field
+      
+        // Function to handle pasting content at cursor position
+
+
+        const insertTextAtCaret = (textToInsert) => {
+            const input = document.getElementById('inputField');
+            const caretPosition = input.selectionStart; // Get the current caret position
+            const currentText = message; // Get the current text in the input
+        
+            // Insert the text at the caret position
+            const newText =
+              currentText.slice(0, caretPosition) + textToInsert + currentText.slice(caretPosition);
+        
+              setmessage(newText);
+        
+            // Update the caret position after inserting the text
+            setTimeout(() => {
+              input.selectionStart = input.selectionEnd = caretPosition + textToInsert.length;
+            }, 0);
+          };
+
+       
 
         const deletetemplate = async(e) => {
             console.log(data[0]._id)
             const deleted = await axios.post("http://localhost:4000/deletetemplate" , {id:data[0]._id} )
             window.location = '/dashboard'
         }
-
+        
+        const handleEmojiSelect = (emojiData) => {
+            // Append the selected emoji to the current text
+            console.log(emojiData)
+            insertTextAtCaret(emojiData.native);
+          };
+        
         setInterval(() => {
             if(serverloading == 'Server Loading.'){
                 setserverloading("Server Loading..")
@@ -74,7 +141,6 @@ const id = searchparams.get('id')
 
 
     },[])
-
 
 
 
@@ -177,7 +243,7 @@ const id = searchparams.get('id')
 
     
 
-    selectedchanels.map((data , id) => console.log(id))
+
 
     const Removeitem = (itemtoremove) =>{
         setselectedchanels(selectedchanels.filter(item => item !== itemtoremove))
@@ -214,7 +280,7 @@ const id = searchparams.get('id')
 
 </form>
 
-        <div className="maintittledash text-[26px]  flex items-center gap-[34px]">New Message <button onClick={() => deletetemplate()} className="delete"><img width={35} className=' flex p-[5px] bg-red-500 rounded-[25px]' src="TrashCan.png" alt=""  /></button> </div>
+        <div className="maintittledash text-[26px]  flex items-center gap-[34px]">New Message but  <button onClick={() => deletetemplate()} className="delete"><img width={35} className=' flex p-[5px] bg-red-500 rounded-[25px]' src="TrashCan.png" alt=""  /></button> </div>
 
         <div className="selectchanel mt-[25px] mb-[25px]">
             <div className="selectittlechanel">SELECT CHANEL</div>
@@ -247,9 +313,20 @@ const id = searchparams.get('id')
 
         <div className="messagetittle">Message</div>
 
-        <textarea value={message} className='w-[1000px] mt-[10px] p-[10px]  h-[300px] rounded-[15px]' placeholder='Enter Your Message To Sent' onChange={(e) => setmessage(e.target.value)}></textarea>
+        <div className="textareadiv w-[500px] relative">
+      <div id="froala-editor">
+      <FroalaEditorComponent        ref={editorRef} model={message} className='w-[500px] mt-[10px] p-[10px]  h-[300px] rounded-[15px]'        tag='textarea'
+ config={options} onModelChange={(e) => setmessage(e)} ></FroalaEditorComponent>
+</div>
 
+      
+      <div className="smile absolute flex items-end "><button onClick={() => emojiopened == true ? setemojiopened(false) : setemojiopened(true)} ><img  width={30} src="Happy.png" alt="" /></button>
 
+      {emojiopened ? <div className="pickerrelative relative"> <Picker data={datas}  onEmojiSelect={handlepaste} /> </div>: null}
+
+     
+      </div>
+      </div>
 
     </div>
     <br />
@@ -275,6 +352,7 @@ const id = searchparams.get('id')
     <div className="btns flex items-center gap-[25px]">
     <button className='p-[5px] bg-blue-500 text-white rounded-[3px] w-[200px]' onClick={(e) => sendmessage()} >Send Message</button>
     <button className='p-[5px] bg-indigo-500 text-white rounded-[3px] w-[200px]' onClick={(e) => savetemplate()} >Save Template</button>
+    <button onClick={() => back()} name='back' className="back h-[33px] pointer text-center flex items-center justify-center ">Back</button>
     </div>
 
 

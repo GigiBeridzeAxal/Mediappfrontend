@@ -1,14 +1,24 @@
 'use client'
 import axios from 'axios'
 import Link from 'next/link'
-import React, { useEffect, useInsertionEffect, useState } from 'react'
+import React, { useEffect, useInsertionEffect, useRef, useState } from 'react'
 
 import EditorJS from '@editorjs/editorjs';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
-import FroalaEditorComponent from 'react-froala-wysiwyg'; import 'froala-editor/css/froala_style.min.css'; import 'froala-editor/css/froala_editor.pkgd.min.css';
-import { Editor } from "novel";
+
+import FroalaEditorComponent from 'react-froala-wysiwyg';
+import 'froala-editor/css/froala_editor.pkgd.min.css';  // Froala editor CSS
+import 'froala-editor/css/froala_style.min.css';        // Froala theme styles
+import 'froala-editor/css/froala_editor.pkgd.min.css';  
+import 'froala-editor/js/froala_editor.pkgd.min.js'; // Froala Editor JS
+import 'froala-editor/js/plugins.pkgd.min.js';
+
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+
+
 
 export default function Dashboard() {
   const [model, setModel] = useState('<p>Hello, Froala!</p>');
@@ -26,20 +36,56 @@ export default function Dashboard() {
         const [create , setcreate] = useState(false)
         const [save , setsave] = useState(false)
         const [emojiopened , setemojiopened] = useState(false)
+        
+        const [editorContent, setEditorContent] = useState('');
+        const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+        const editorRef = useRef(null);
+
+
+        const insertEmoji = (emoji) => {
+          const editor = editorRef.current;
+          const cursorPosition = editor.element;
+          console.log(cursorPosition)
+      
+          // Insert emoji at the cursor position in the editor content
+          editor.selection.text(emoji.native);
+          setmessage(editor.html.get());
+        };
 
 
 
-        const config = {
-          toolbarButtons: ['bold', 'italic', 'underline', '|', 'fontSize', 'color', 'align', 'undo', 'redo'],
-          fontSize: ['12', '14', '18', '24', '30', '36'], // Font sizes for the dropdown
+
+        
+          // Handle the paste event
+        
+   
+        const options = {
+          placeholderText: 'Edit Your Text Here!',
+          charCounterCount: false,
+          pluginsEnabled: ['emoji', 'bold', 'italic', 'underline'], // You can add other plugins too
+          toolbarButtons:   [['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript , fontSize', 'emoji'], ['fontFamily', 'fontSize', 'textColor', 'backgroundColor'], ['inlineClass', 'inlineStyle', 'clearFormatting']],
+          fontSize: ['12px', '16px', '20px', '24px', '30px', '40px'],  // Custom font size options
+          fontFamily: ['Arial', 'Courier', 'Times New Roman'],  // Custom font family options
+          emojiButtons: ['emoji'],
         };
      
 
-        const handleEmojiSelect = (emojiData) => {
+        const handleEmojiSelect = (emoji) => {
             // Append the selected emoji to the current text
-            console.log(emojiData)
-            setmessage((prevText) => prevText + emojiData.native);
+
+            insertTextAtCaret(emojiData.native)
           };
+
+          const handlepaste = (emoji) => {
+            const editor = editorRef.current.editor
+            const cursorPosition = editor.selection.get();
+    
+            // Insert the emoji at the cursor position
+            editor.html.insert(emoji.native);
+        
+            // Update the state with the new content
+            setmessage(editor.html.get());
+          }
         
 
      
@@ -262,10 +308,17 @@ export default function Dashboard() {
       <div>
 
       </div>
-      <div className="textareadiv relative">
-      <textarea  value={message} className='w-[1000px] mt-[10px] p-[10px]  h-[300px] rounded-[15px]' placeholder='Enter Your Message To Sent' onChange={(e) => setmessage(e.target.value)}></textarea>
+      <div className="textareadiv w-[500px] relative">
+      <div id="froala-editor">
+      <FroalaEditorComponent        ref={editorRef} model={message} className='w-[500px] mt-[10px] p-[10px]  h-[300px] rounded-[15px]'        tag='textarea'
+ config={options} onModelChange={(e) => setmessage(e)} ></FroalaEditorComponent>
+</div>
+
+      
       <div className="smile absolute flex items-end "><button onClick={() => emojiopened == true ? setemojiopened(false) : setemojiopened(true)} ><img  width={30} src="Happy.png" alt="" /></button>
-      {emojiopened ? <Picker data={data}  onEmojiSelect={handleEmojiSelect} /> : null}
+
+      {emojiopened ? <div className="pickerrelative relative"> <Picker data={data}  onEmojiSelect={handlepaste} /> </div>: null}
+
      
       </div>
       </div>

@@ -4,9 +4,11 @@ import React, { useState } from 'react'
 
 export default function Login() {
     const [phonenumber , setphonenumber] = useState()
-    const [code , setcode] = useState()
+    const [code , setcode] = useState('')
     const [codeopened , setcodeopened] = useState(false)
     const [sessionid , setses] = useState()
+
+    
     const countiniuesession = async(e) => {
         e.preventDefault();
 
@@ -57,7 +59,7 @@ export default function Login() {
             {codeopened == true ? <><form onSubmit={(e) => Authtelegram2(e)} className='flex flex-col justify-start gap-[10px]' >
             <label className='text-gray-500 ' >Code</label>
             <div className="codeaut">
-                <input value={code} defaultValue={''}  onChange={(e) => setcode(e.target.value)} className='p-[10px] w-[300px] rounded-[5px]' type="text" placeholder='Code' />
+                <input value={code}   onChange={(e) => setcode(e.target.value)} className='p-[10px] w-[300px] rounded-[5px]' type="text" placeholder='Code' />
             </div>
           
             <button className='bg-blue-500 p-[5px] text-white w-[150px] mt-[15px]' >Submit</button>

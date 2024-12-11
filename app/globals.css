@@ -80,8 +80,14 @@ body{
 .smile{
   bottom: 10px;
   position: absolute;
-  left: 950px;
+  left: 460px;
 }
 .delete{
   z-index: 15;
+}
+.pickerrelative{
+  bottom: -55px;
+  position: absolute;
+  margin-top: 25px;
+  left: 50px
 }
