@@ -36,18 +36,30 @@ const id = searchparams.get('id')
         const [emojiopened , setemojiopened] = useState(false)
         const editorRef = useRef(null);
         const [selchannels , setselchannels] = useState([''])
+                const [create , setcreate] = useState(false)
+                const [save , setsave] = useState(false)
 
 
            
-        const options = {
-          placeholderText: 'Edit Your Text Here!',
-          charCounterCount: false,
-          pluginsEnabled: ['emoji', 'bold', 'italic', 'underline'], // You can add other plugins too
-          toolbarButtons:   [['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript , fontSize', 'emoji'], ['fontFamily', 'fontSize', 'textColor', 'backgroundColor'], ['inlineClass', 'inlineStyle', 'clearFormatting']],
-          fontSize: ['12px', '16px', '20px', '24px', '30px', '40px'],  // Custom font size options
-          fontFamily: ['Arial', 'Courier', 'Times New Roman'],  // Custom font family options
-          emojiButtons: ['emoji'],
-        };
+                const options = {
+                    placeholderText: 'Edit Your Text Here!',
+                  
+                 
+                    fontSize: ['12px', '16px', '20px', '24px', '30px', '40px'],  // Custom font size options
+                    fontFamily: ['Arial', 'Courier', 'Times New Roman'],  // Custom font family options
+                    emojiButtons: ['emoji'],
+                    lineBreaks: false,  // Set to false to prevent <br> from being inserted
+                    // Configure paragraph formatting
+                    paragraphFormat: {
+                      P: 'Normal',
+                      H1: 'Heading 1',
+                      H2: 'Heading 2',
+                      H3: 'Heading 3',
+                    },
+                    toolbarButtons: ['bold', 'italic', 'underline', 'insertHR' , 'insertLink', 'undo', 'redo' ], // Add 'insertHR' for horizontal line
+                    // Ensure whitespace is preserved without inserting <br> tags
+                    htmlUntouched: false,  // Prevent automatic modification of HTML
+                  };
         const handlepaste = (emoji) => {
             const editor = editorRef.current.editor
             const cursorPosition = editor.selection.get();
@@ -150,15 +162,25 @@ const id = searchparams.get('id')
 
 
     const savetemplate = async() => {
+        setsave(true)
+
+
         const getinfo = await axios.post('http://localhost:4000/update' , {selectedchanels , message , uploadedfiles , allpath , date , id})
+
+
 
     }
 
 
         const sendmessage = async() => {
+            setcreate(true)
 
+       
             console.log(selectedchanels)
             const getinfo = await axios.post('http://localhost:4000/sendmessages' , {selectedchanels , messagei:message , uploadedfiles , allpath , date})
+
+             
+        
         }
       
 
@@ -265,6 +287,38 @@ const id = searchparams.get('id')
   return (
     <div className="dashboard p-[25px]">
     <div className="dashboardframe">
+    {create == true ?    <div className="succesfulycreated">
+
+<div className="msesage">
+  <div className="messageframe">
+    <div className="succesfuly text-[24px] text-black">Succesfully</div>
+    <div className="maimessage">Send Message.</div>
+    <div className="okaybtnframe flex items-center">
+    <button className='messageokay bg-blue-500 text-white' onClick={(e) => setcreate(false)} >Okay</button>
+    </div>
+
+  </div>
+</div>
+
+<div className="blur"></div>
+
+  </div> : null}
+    {save == true ?    <div className="succesfulycreated">
+
+<div className="msesage">
+  <div className="messageframe">
+    <div className="succesfuly text-[24px] text-black">Succesfully</div>
+    <div className="maimessage">Save Template.</div>
+    <div className="okaybtnframe flex items-center">
+    <button className='messageokay bg-blue-500 text-white' onClick={(e) => setsave(false)} >Okay</button>
+    </div>
+
+  </div>
+</div>
+
+<div className="blur"></div>
+
+  </div> : null}
     {loading == true ?    <div className="succesfulycreated">
 
 <div className="msesage">

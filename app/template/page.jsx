@@ -11,6 +11,9 @@ export default function page() {
     const [loading , setloading ] = useState(true)
     const [serverloading , setserverloading] = useState('Server Loading.')
 
+    const back = () => {
+        window.location = '/dashboard'
+    }
 
     const deletetemplate = (data) => {
         console.log(data)
@@ -73,7 +76,7 @@ export default function page() {
 
   </div> : null}
         <div>
-            <h1 className='text-[24px]' >Templates</h1>
+            <h1 className='text-[24px] flex items-center gap-[5px]' >Templates     <button onClick={() => back()} name='back' className="back h-[33px] pointer text-center flex items-center justify-center ">Home</button></h1>
             <br />
 
             <div  className='flex flex-wrap gap-[10px] items-center' >

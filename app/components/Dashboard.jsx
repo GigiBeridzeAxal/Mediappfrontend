@@ -75,7 +75,7 @@ export default function Dashboard() {
             H2: 'Heading 2',
             H3: 'Heading 3',
           },
-          toolbarButtons: ['bold', 'italic', 'underline', 'insertHR', 'undo', 'redo'], // Add 'insertHR' for horizontal line
+          toolbarButtons: ['bold', 'italic', 'underline', 'insertHR' , 'insertLink', 'undo', 'redo' ], // Add 'insertHR' for horizontal line
           // Ensure whitespace is preserved without inserting <br> tags
           htmlUntouched: false,  // Prevent automatic modification of HTML
         };
@@ -108,9 +108,7 @@ export default function Dashboard() {
 
             const send = await axios.post("http://localhost:4000/savetemplate" , {selectedchanels , messagei:message , uploadedfiles , allpath , date})
             setsave(true)
-            setTimeout(() => {
-                setsave(false)
-            }, 2500);
+    
 
         }
 
@@ -273,7 +271,7 @@ export default function Dashboard() {
     <div className="succesfuly text-[24px] text-black">Succesfully</div>
     <div className="maimessage">Save Template.</div>
     <div className="okaybtnframe flex items-center">
-    <button className='messageokay bg-blue-500 text-white' onClick={(e) => setcreate(false)} >Okay</button>
+    <button className='messageokay bg-blue-500 text-white' onClick={(e) => setsave(false)} >Okay</button>
     </div>
 
   </div>
