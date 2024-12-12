@@ -326,7 +326,7 @@ export default function Dashboard() {
 
 
       <div>
-      {message}
+
       </div>
       <div className="textareadiv w-[500px] relative">
       <div id="froala-editor">
