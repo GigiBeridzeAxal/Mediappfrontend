@@ -70,9 +70,13 @@ body{
 }
 .maintemplate{
   overflow-x: hidden;
-  overflow-y: auto;
-  max-height: 200px;
+  overflow-y: hidden;
+
+  padding: 10px;
   max-width: 300px;
+  min-height: 200px;
+  height: fit-content;
+  max-height: 500px;
 }
 .textareadiv{
   position: relative;
@@ -90,4 +94,11 @@ body{
   position: absolute;
   margin-top: 25px;
   left: 50px
+}
+.froala-editor {
+  white-space: pre-wrap; /* This will preserve spaces and line breaks */
+}
+.fr-view {
+  white-space: pre-wrap !important; /* Ensure spaces and line breaks are preserved */
+  word-wrap: break-word; /* Prevent long words from overflowing */
 }

@@ -36,6 +36,7 @@ export default function Dashboard() {
         const [create , setcreate] = useState(false)
         const [save , setsave] = useState(false)
         const [emojiopened , setemojiopened] = useState(false)
+        const [client , setclinet] = useState(false) 
         
         const [editorContent, setEditorContent] = useState('');
         const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -61,14 +62,27 @@ export default function Dashboard() {
    
         const options = {
           placeholderText: 'Edit Your Text Here!',
-          charCounterCount: false,
-          pluginsEnabled: ['emoji', 'bold', 'italic', 'underline'], // You can add other plugins too
-          toolbarButtons:   [['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript , fontSize', 'emoji'], ['fontFamily', 'fontSize', 'textColor', 'backgroundColor'], ['inlineClass', 'inlineStyle', 'clearFormatting']],
+        
+       
           fontSize: ['12px', '16px', '20px', '24px', '30px', '40px'],  // Custom font size options
           fontFamily: ['Arial', 'Courier', 'Times New Roman'],  // Custom font family options
           emojiButtons: ['emoji'],
+          lineBreaks: false,  // Set to false to prevent <br> from being inserted
+          // Configure paragraph formatting
+          paragraphFormat: {
+            P: 'Normal',
+            H1: 'Heading 1',
+            H2: 'Heading 2',
+            H3: 'Heading 3',
+          },
+          toolbarButtons: ['bold', 'italic', 'underline', 'insertHR', 'undo', 'redo'], // Add 'insertHR' for horizontal line
+          // Ensure whitespace is preserved without inserting <br> tags
+          htmlUntouched: false,  // Prevent automatic modification of HTML
         };
      
+        useEffect(() => {
+          setclinet(true)
+        },[])
 
         const handleEmojiSelect = (emoji) => {
             // Append the selected emoji to the current text
@@ -92,7 +106,7 @@ export default function Dashboard() {
         const savetemplate = async() => {
 
 
-            const send = await axios.post("http://localhost:4000/savetemplate" , {selectedchanels , message , uploadedfiles , allpath , date})
+            const send = await axios.post("http://localhost:4000/savetemplate" , {selectedchanels , messagei:message , uploadedfiles , allpath , date})
             setsave(true)
             setTimeout(() => {
                 setsave(false)
@@ -102,6 +116,9 @@ export default function Dashboard() {
 
 
         const sendmessage = async() => {
+          
+       
+
 
             if(selectedchanels.length == 0){
                 setnotselected(true)
@@ -111,7 +128,7 @@ export default function Dashboard() {
             }else{
              setnotselected(false)
              setcreate(true)
-                const getinfo = await axios.post('http://localhost:4000/sendmessages' , {selectedchanels , message , uploadedfiles , allpath , date})
+                const getinfo = await axios.post('http://localhost:4000/sendmessages' , {selectedchanels , messagei:message , uploadedfiles , allpath , date})
              
             }
             console.log(selectedchanels)
@@ -219,13 +236,16 @@ export default function Dashboard() {
 
     
 
-    selectedchanels.map((data , id) => console.log(id))
+
 
     const Removeitem = (itemtoremove) =>{
         setselectedchanels(selectedchanels.filter(item => item !== itemtoremove))
     }
 
 
+    if(!client){
+      return null
+    }
 
   return (
     <div className="dashboard p-[25px]">
@@ -278,7 +298,7 @@ export default function Dashboard() {
       
                 </button>
 
-                {selector == true ? <div className="selector absolute top-[70px] left-[0px] w-[100%] flex flex-col gap-[1px] p-[5px] rounded-[10px] bg-white">{channels.map(value => <button onClick={() => selectedchanels.includes(value) ? Removeitem(value) :  setselectedchanels([...selectedchanels , value]) }  className='bg-gray-200 index-[5] selbtn w-[100%] p-[10px] rounded-[10px] flex items-center justify-center flex items-center justify-between' key={value} >{value[0]} {selectedchanels.includes(value) ? <img width={25} src="Checkmark.png" alt="" /> : null}</button>)}</div> : null} 
+                {selector == true ?  <div className="selector absolute top-[70px] left-[0px] w-[100%] flex flex-col gap-[1px] p-[5px] rounded-[10px] bg-white">{channels.map(value => <button onClick={() => selectedchanels.includes(value) ? Removeitem(value) :  setselectedchanels([...selectedchanels , value]) }  className='bg-gray-200 index-[5] selbtn w-[100%] p-[10px] rounded-[10px] flex items-center justify-center flex items-center justify-between' key={value} >{value[0]} {selectedchanels.includes(value) ? <img width={25} src="Checkmark.png" alt="" /> : null}</button>)}</div> : null} 
                     </div>
                
 
@@ -306,7 +326,7 @@ export default function Dashboard() {
 
 
       <div>
-
+      {message}
       </div>
       <div className="textareadiv w-[500px] relative">
       <div id="froala-editor">
@@ -318,6 +338,7 @@ export default function Dashboard() {
       <div className="smile absolute flex items-end "><button onClick={() => emojiopened == true ? setemojiopened(false) : setemojiopened(true)} ><img  width={30} src="Happy.png" alt="" /></button>
 
       {emojiopened ? <div className="pickerrelative relative"> <Picker data={data}  onEmojiSelect={handlepaste} /> </div>: null}
+
 
      
       </div>

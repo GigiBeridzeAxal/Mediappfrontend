@@ -35,6 +35,7 @@ const id = searchparams.get('id')
         const [serverloading , setserverloading] = useState('Server Loading.')
         const [emojiopened , setemojiopened] = useState(false)
         const editorRef = useRef(null);
+        const [selchannels , setselchannels] = useState([''])
 
 
            
@@ -98,8 +99,8 @@ const id = searchparams.get('id')
             console.log(emojiData)
             insertTextAtCaret(emojiData.native);
           };
-        
-        setInterval(() => {
+        if(serverloading){
+             setInterval(() => {
             if(serverloading == 'Server Loading.'){
                 setserverloading("Server Loading..")
             }
@@ -111,6 +112,8 @@ const id = searchparams.get('id')
             }
         }, 500);
 
+        }
+       
     useEffect(() => {
   
         const func = async() => {
@@ -119,6 +122,7 @@ const id = searchparams.get('id')
             setdata(send.data)
             console.log(send.data[0])
             setuploadedfiles(send.data[0].uploadedfiles)
+            send.data[0].selectedchanels.map(data => setselchannels([...selectedchanels , data[0]]))
             setselectedchanels(send.data[0].selectedchanels)
             setdate(send.data[0].date)
             setmessage(send.data[0].message)
@@ -154,7 +158,7 @@ const id = searchparams.get('id')
         const sendmessage = async() => {
 
             console.log(selectedchanels)
-            const getinfo = await axios.post('http://localhost:4000/sendmessages' , {selectedchanels , message , uploadedfiles , allpath , date})
+            const getinfo = await axios.post('http://localhost:4000/sendmessages' , {selectedchanels , messagei:message , uploadedfiles , allpath , date})
         }
       
 
@@ -229,8 +233,6 @@ const id = searchparams.get('id')
        
         
 
-        
-
   
         
        //  files.map(data => reader.readAsDataURL(data)) //
@@ -241,12 +243,23 @@ const id = searchparams.get('id')
 
     }
 
+
+
+    if(channels){
+       
+    }
+
     
 
 
 
     const Removeitem = (itemtoremove) =>{
-        setselectedchanels(selectedchanels.filter(item => item !== itemtoremove))
+        console.log(itemtoremove)
+        console.log("Removing" , selectedchanels.filter(item => item[1] !== itemtoremove))
+
+        setselectedchanels(selectedchanels.filter(item => item[1] !== itemtoremove))
+        setselchannels(selchannels.filter(item => item !== itemtoremove))
+        
     }
 
   return (
@@ -292,7 +305,7 @@ const id = searchparams.get('id')
             
             </button>
 
-            {selector == true ? <div className="selector absolute top-[70px] left-[0px] w-[100%] flex flex-col gap-[1px] p-[5px] rounded-[10px] bg-white">{channels.map(value => <button onClick={() => selectedchanels.includes(value) ? Removeitem(value) :  setselectedchanels([...selectedchanels , value]) }  className='bg-gray-200 index-[5] selbtn w-[100%] p-[10px] rounded-[10px] flex items-center justify-center flex items-center justify-between' key={value} >{value[0]} {selectedchanels.includes(value) ? <img width={25} src="Checkmark.png" alt="" /> : null}</button>)}</div> : null} 
+            {selector == true ?  <div className="selector absolute top-[70px] left-[0px] w-[100%] flex flex-col gap-[1px] p-[5px] rounded-[10px] bg-white">{channels.map(value => <button onClick={() =>console.log(value , selectedchanels) | selectedchanels.map(data => data[1]).includes(value[1]) ? Removeitem(value[1]) :  setselectedchanels([...selectedchanels , value]) }  className='bg-gray-200 index-[5] selbtn w-[100%] p-[10px] rounded-[10px] flex items-center justify-center flex items-center justify-between' key={value} >{value[0]} {selectedchanels.map(data => data[1]).includes(value[1]) ? <img width={25} src="Checkmark.png" alt="" /> : null}</button>)}</div> : null} 
                 </div>
            
 

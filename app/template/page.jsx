@@ -16,17 +16,20 @@ export default function page() {
         console.log(data)
     }
 
-    setInterval(() => {
-        if(serverloading == 'Server Loading.'){
-            setserverloading("Server Loading..")
-        }
-        if(serverloading == 'Server Loading..'){
-            setserverloading("Server Loading...")
-        }
-        if(serverloading == 'Server Loading...'){
-            setserverloading("Server Loading.")
-        }
-    }, 500);
+    if(serverloading){
+        setInterval(() => {
+            if(serverloading == 'Server Loading.'){
+                setserverloading("Server Loading..")
+            }
+            if(serverloading == 'Server Loading..'){
+                setserverloading("Server Loading...")
+            }
+            if(serverloading == 'Server Loading...'){
+                setserverloading("Server Loading.")
+            }
+        }, 500);
+    }
+  
 
     useEffect(() => {
 
@@ -84,8 +87,9 @@ export default function page() {
                      <div className="center flex items-center justify-center w-[100%]">
                      <img width={150} src={data.uploadedfiles[0]} alt="" />
                      </div>
+                     <div dangerouslySetInnerHTML={{__html:data.message}} className="da"></div>
 
-                    <div className="tempaltedate">{data.createdAt}</div>
+
 
 
                     </Link>
